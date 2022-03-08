@@ -1,0 +1,35 @@
+{% extends "layout.html" %} 
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block main %}
+
+<div id="app">
+    <canvas id="canvas">
+        <p>Your browser is too old for canvas</p>
+    </canvas>
+</div>
+<div class="scrolled">
+    <div data-template hidden class="expression">
+        <input name="expression" placeholder="Expression" id="input-expression" style="background-color: gainsboro;" />
+        <input name="color" style="width: 100px; background-color: gainsboro;" placeholder="Color" />
+        <button data-delete id="btn-delete">Delete</button>
+    </div>
+
+    <div class="controll">
+        <div class="row expressions" data-expressions name="expressions" id="exps"></div>
+
+        <div class="row">
+            <button data-append id="append">Append</button>
+            <button data-draw id="draw">Draw</button>
+        </div>
+
+        <div class="row">
+            <p data-error hidden>Invalid input</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

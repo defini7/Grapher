@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Library
+{% endblock %}
+
+{% block main %}
+  <form action="/library" method="POST">
+    {% for e in expressions %}
+      <div class="expression text-center">
+        <input id="input-expression" style="background-color: gainsboro;" value="{{ e['name'] }}" readonly="readonly" />
+        <input style="background-color: gainsboro; width: 10%" value="{{ e['expression'] }}" readonly="readonly" />
+        <input style="width: 100px; background-color: gainsboro;" value="{{ e['color'] }}" readonly="readonly" />
+        <button type="submit" name="{{ e['id'] }}" onclick="load()" id="btn-submit">Load {{ e['name'] }}</button>
+      </div>
+    {% endfor %}
+  </form>
+{% endblock %}

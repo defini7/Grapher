@@ -1,0 +1,23 @@
+{% extends "layout.html" %} 
+
+{% block title %}
+    Sign In
+{% endblock %}
+
+{% block main %}
+
+<form action="/signup" method="POST">
+    <div class="form-group sign-div">
+        <p style="font-size: larger;">Name</p>
+        <input type="text" class="form-control sign-input" name="username" placeholder="Name"/>
+        <p style="font-size: larger;">Password</p>
+        <input type="password" class="form-control sign-input" name="password" placeholder="Password"/>
+        <p style="font-size: larger;">Confirm password</p>
+        <input type="password" class="form-control sign-input" name="confirmation" placeholder="Confirmation"/>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-success">Sign Up</button>
+    </div>
+</form>
+
+{% endblock %}

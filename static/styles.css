@@ -1,0 +1,119 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    background-color: gray;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.scrolled {
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+#app {
+    width: 100%;
+    flex-basis: 600px;
+    min-height: 600px;
+    position: relative;
+    border-bottom: 1px solid gray;
+    background-color: #fff;
+}
+
+canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+[data-error] {
+    color: rgb(146, 38, 38);
+    background-color: white;
+    padding: 5px 20px;
+    border-radius: 10px;
+}
+  
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-weight: bold;
+}
+
+.sign-input {
+    margin-bottom: 10px; 
+    background-color: gainsboro;
+}
+
+.sign-div {
+    width: 30%;
+    margin-top: 20px; 
+    margin-left: 35%;
+}
+
+.controll {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.expression {
+    margin-top: 5px;
+}
+
+.row {
+    margin: 10px;
+    display: table-column;
+}
+
+#append, #draw {
+    border-radius: 10px;
+}
+
+#append {
+    background-color:rgb(123, 174, 190);
+    border-color: rgb(123, 174, 190);
+    margin-right: 20px;
+}
+
+#draw {
+    background-color: rgb(83, 172, 138);
+    border-color: rgb(83, 172, 138);
+}
+
+#input-expression {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#btn-delete {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: rgb(189, 77, 83);
+    border-color: rgb(189, 77, 83);
+}
+
+#btn-submit {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: rgb(69, 194, 75);
+    border-color: rgb(69, 194, 75);
+}
+
+input, button {
+    padding: 10px 20px;
+}
+
+button {
+    cursor: pointer
+}
