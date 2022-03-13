@@ -185,7 +185,9 @@ function wheel(e) {
 
 window.onload = function () {
     canvas = document.getElementById('canvas')
-    context = canvas.getContext('2d')
+    if (canvas) {
+        context = canvas.getContext('2d')
+    }
 
     errorElement = document.querySelector('[data-error]')
     appendBtnElement = document.querySelector('[data-append]')
@@ -225,12 +227,27 @@ window.onload = function () {
         }
     })
 
-    resize()
-    addEventListener('resize', resize)
-    canvas.addEventListener('wheel', wheel)
-    errorElement.innerText = state.error
-    appendBtnElement.addEventListener('click', appendRow)
-    drawBtnElement.addEventListener('click', onDrawClick)
+    if (context) {
+        resize()
+        addEventListener('resize', resize)
+    }
+
+    if (canvas) {
+        if (new_graphs.length > 0) {
+            new_graphs.forEach(graph => {
+                appendRow()
+                let elems = document.querySelector('[data-expressions]').querySelectorAll('.expression')
+                elems[elems.length - 1].querySelector('input[name="expression"]').value = graph.expression
+                elems[elems.length - 1].querySelector('input[name="color"]').value = graph.color
+            })
+            new_graphs.splice(0, new_graphs.length);
+        }
+
+        canvas.addEventListener('wheel', wheel)
+        errorElement.innerText = state.error
+        appendBtnElement.addEventListener('click', appendRow)
+        drawBtnElement.addEventListener('click', onDrawClick)
+    }
 }
 
 function save() {
@@ -253,22 +270,16 @@ function save() {
     })
 }
 
-async function load() {
-    console.log('All works')
-    const responce = await fetch('/load', {
-        method: 'GET',
+function load(ids) {
+    ids.forEach(id => {
+        fetch('/load/' + parseInt(id), {
+            method: 'GET'
+        }).then(function (responce) {
+            if (responce.ok) {
+                responce.json().then(function (graph) {
+                    console.log(graph)
+                })
+            }
+        })
     })
-
-    if (responce.ok) {
-        responce.json().then(result => result.forEach(graph => {
-            appendRow()
-            let elems = document.querySelector('[data-expressions]').querySelectorAll('.expression')
-            elems[elems.length - 1].querySelector('input[name="expression"]').value = graph.expression
-            elems[elems.length - 1].querySelector('input[name="color"]').value = graph.color
-        }))
-
-        let old_elems = document.querySelector('[data-expressions]').querySelectorAll('.expression')
-        window.location.href = '/'
-        document.querySelector('[data-expressions]').querySelectorAll('.expression') = old_elems
-    }
 }

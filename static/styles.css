@@ -103,7 +103,7 @@ canvas {
     border-color: rgb(189, 77, 83);
 }
 
-#btn-submit {
+.btn-submit {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background-color: rgb(69, 194, 75);
@@ -116,4 +116,9 @@ input, button {
 
 button {
     cursor: pointer
+}
+
+input[type=checkbox] {
+    width: 5vw;
+    height: 5vh;
 }

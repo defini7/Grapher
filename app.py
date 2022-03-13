@@ -106,6 +106,7 @@ def save():
 def load(id):
     dtb = db.get_db()
     graph = [dict(r) for r in dtb.execute('SELECT * FROM graphs WHERE id = ? AND user_id = ?', (id, session.get('user_id'))).fetchall()][0]
+    print(graph)
     return json.dumps(graph)
 
 @login_required
@@ -113,9 +114,6 @@ def load(id):
 def library():
     dtb = db.get_db()
     exps = [dict(r) for r in dtb.execute('SELECT * FROM graphs WHERE user_id = ?', (session.get('user_id'),)).fetchall()]
-
-    if request.method == 'POST':
-        return redirect('/load/' + str(list(request.form.keys())[0]))
 
     return render_template('library.html', expressions=exps)
 
