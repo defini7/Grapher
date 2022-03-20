@@ -3,3 +3,4 @@ __pycache__
 .git
 graphs.db
 package-lock.json
+.vscode
