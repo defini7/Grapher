@@ -7,6 +7,8 @@ let size = {
     y: 0
 }
 
+let elems;
+
 function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
@@ -24,8 +26,6 @@ function drawAll() {
     drawGrid(50)
     drawAxis()
 
-    state.error = ''
-
     document.querySelector('[data-expressions]').querySelectorAll('.expression')
         .forEach(function (elem) {
             const expression = elem.querySelector('input[name="expression"]').value.toLowerCase() || ''
@@ -36,7 +36,7 @@ function drawAll() {
             try {
                 drawGraph(expression, color)
             } catch (e) {
-                state.error += `${e}`
+                console.log(e)
             }
         })
 }
@@ -53,7 +53,9 @@ function restoreState() {
         if (typeof data == 'object' && !Array.isArray(data))
             return data
 
-    } catch (e) { }
+    } catch (e) {
+        console.log(e)
+    }
     return {}
 }
 
@@ -195,7 +197,6 @@ window.onload = function () {
 
     state = new Proxy({
         scale: 1,
-        error: '',
         ...restoreState()
     }, {
         get(target, key) {
@@ -205,23 +206,8 @@ window.onload = function () {
             target[key] = value
             saveState()
 
-            switch (key) {
-                case 'scale': {
-                    drawAll()
-                    break
-                }
-
-                case 'error': {
-                    if (value) {
-                        errorElement.removeAttribute('hidden')
-                    }
-                    else {
-                        errorElement.hidden = true
-                        errorElement.innerText = value
-                    }
-                    break
-                }
-            }
+            if (key == 'scale')
+                drawAll()
 
             return true
         }
@@ -233,16 +219,6 @@ window.onload = function () {
     }
 
     if (canvas) {
-        if (new_graphs.length > 0) {
-            new_graphs.forEach(graph => {
-                appendRow()
-                let elems = document.querySelector('[data-expressions]').querySelectorAll('.expression')
-                elems[elems.length - 1].querySelector('input[name="expression"]').value = graph.expression
-                elems[elems.length - 1].querySelector('input[name="color"]').value = graph.color
-            })
-            new_graphs.splice(0, new_graphs.length);
-        }
-
         canvas.addEventListener('wheel', wheel)
         errorElement.innerText = state.error
         appendBtnElement.addEventListener('click', appendRow)
@@ -270,16 +246,25 @@ function save() {
     })
 }
 
-function load(ids) {
-    ids.forEach(id => {
-        fetch('/load/' + parseInt(id), {
-            method: 'GET'
-        }).then(function (responce) {
-            if (responce.ok) {
-                responce.json().then(function (graph) {
-                    console.log(graph)
-                })
-            }
-        })
+function load() {
+    let ids = []
+
+    const expressions = document.querySelector('div[id=all-expressions]').querySelectorAll('div')
+    expressions.forEach(exp => {
+        const inputs = exp.getElementsByTagName('input')
+        const checkbox = inputs[inputs.length - 1]
+
+        if (checkbox.checked) ids.push(checkbox.value)
     })
+
+    document.getElementById('ids').value = ids.join(' ')
+
+    document.getElementById('form-library').submit()
+}
+
+function delete_graph(id) {
+    fetch('/delete/' + id, {
+        method: 'POST'
+    })
+    window.location.replace('/library')
 }

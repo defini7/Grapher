@@ -1,3 +1,4 @@
+from asyncio import InvalidStateError
 from datetime import datetime
 from flask import render_template, session, redirect, request, flash, Flask
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -22,9 +23,16 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/', methods=["GET", "POST"])
-def index():
-    return render_template('index.html', expressions=[])
+@app.route('/', defaults={'ids': None})
+@app.route('/<ids>', methods=["GET", "POST"])
+def index(ids):
+    exps = []
+
+    if ids is not None and ids != 'favicon.ico':
+        dtb = db.get_db()
+        exps = [dict(dtb.execute('SELECT * FROM graphs WHERE id = ?', (id,)).fetchall()[0]) for id in ids.split('-')]
+
+    return render_template('index.html', expressions=exps)
 
 @app.route('/signin', methods=["GET", "POST"])
 def signin():
@@ -48,7 +56,7 @@ def signin():
 
         session['user_id'] = userdata['id']
 
-        return redirect('/')
+        return redirect('/#')
 
     return render_template('signin.html')
 
@@ -106,7 +114,6 @@ def save():
 def load(id):
     dtb = db.get_db()
     graph = [dict(r) for r in dtb.execute('SELECT * FROM graphs WHERE id = ? AND user_id = ?', (id, session.get('user_id'))).fetchall()][0]
-    print(graph)
     return json.dumps(graph)
 
 @login_required
@@ -115,7 +122,22 @@ def library():
     dtb = db.get_db()
     exps = [dict(r) for r in dtb.execute('SELECT * FROM graphs WHERE user_id = ?', (session.get('user_id'),)).fetchall()]
 
+    if request.method == 'POST':
+        ids = request.form.get('secret-field')
+        return redirect('/' + ids.replace(' ', '-'))
+
     return render_template('library.html', expressions=exps)
+
+@login_required
+@app.route('/delete/<id>', methods=['POST'])
+def delete(id):
+    dtb = db.get_db()
+
+    if dict(dtb.execute('SELECT user_id FROM graphs WHERE id = ?', (id,)).fetchall()[0])['user_id'] == session.get('user_id'):
+        dtb.execute('DELETE FROM graphs WHERE id = ?', (id,))
+        dtb.commit()
+
+    return json.dumps({})
 
 if __name__ == "__main__":
     app.run()

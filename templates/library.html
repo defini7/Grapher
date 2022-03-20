@@ -5,34 +5,21 @@
 {% endblock %}
 
 {% block main %}
-  <form action="/library" method="POST">
-    <script>
-      function add_graphs_to_load()
-      {
-        let to_load_graphs = []
-        const expressions = document.querySelector('div[id=all-expressions]').querySelectorAll('div')
-        expressions.forEach(exp => {
-          const inputs = exp.getElementsByTagName('input')
-          const checkbox = inputs[inputs.length - 1]
-
-          if (checkbox.checked)
-            to_load_graphs.push(checkbox.value)
-        })
-        return to_load_graphs
-      }
-    </script>
-    <div id="all-expressions">
-      {% for e in expressions %}
-      <div class="expression text-center">
-        <input id="input-expression" style="background-color: gainsboro;" value="{{ e['name'] }}" readonly="readonly" />
-        <input style="background-color: gainsboro; width: 10%" value="{{ e['expression'] }}" readonly="readonly" />
-        <input style="width: 100px; background-color: gainsboro;" value="{{ e['color'] }}" readonly="readonly" />
-        <input type="checkbox" value="{{ e['id'] }}" readonly="readonly" />
-      </div>
-      {% endfor %}
-    </div>
+  <div id="all-expressions">
+    {% for e in expressions %}
     <div class="expression text-center">
-      <input type="button" class="btn-submit" style="border-bottom-left-radius: 10px; border-top-left-radius: 10px; margin-top: 10px;" onclick="load(add_graphs_to_load())" value="Load" />
+      <input id="input-expression" style="background-color: gainsboro;" value="{{ e['name'] }}" readonly="readonly" />
+      <input style="background-color: gainsboro; width: 10%" value="{{ e['expression'] }}" readonly="readonly" />
+      <input style="width: 100px; background-color: gainsboro;" value="{{ e['color'] }}" readonly="readonly" />
+      <input type="button" onclick="delete_graph(`{{ e['id'] }}`)" value="Delete" id="btn-delete" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+      <input type="checkbox" value="{{ e['id'] }}" />
+    </div>
+    {% endfor %}
+  </div>
+  <form action="/library" method="POST" id="form-library">
+    <div class="expression text-center">
+      <input type="text" name="secret-field" id="ids" hidden />
+      <input type="button" class="btn-submit" style="border-bottom-left-radius: 10px; border-top-left-radius: 10px; margin-top: 10px;" onclick="load()" value="Load" />
     </div>
   </form>
 {% endblock %}

@@ -32,4 +32,13 @@
     </div>
 </div>
 
+{% for e in expressions %}
+<script>
+    appendRow()
+    elems = document.querySelector('[data-expressions]').querySelectorAll('.expression')
+    elems[elems.length - 1].querySelector('input[name="expression"]').value = `{{ e['expression'] }}`
+    elems[elems.length - 1].querySelector('input[name="color"]').value = `{{ e['color'] }}`
+</script>
+{% endfor %}
+
 {% endblock %}
