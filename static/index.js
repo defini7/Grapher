@@ -266,5 +266,6 @@ function delete_graph(id) {
     fetch('/delete/' + id, {
         method: 'POST'
     })
+    document.getElementById(id).remove()
     window.location.replace('/library')
 }

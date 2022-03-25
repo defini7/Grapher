@@ -7,7 +7,7 @@
 {% block main %}
   <div id="all-expressions">
     {% for e in expressions %}
-    <div class="expression text-center">
+    <div class="expression text-center" id="{{ e['id'] }}">
       <input id="input-expression" style="background-color: gainsboro;" value="{{ e['name'] }}" readonly="readonly" />
       <input style="background-color: gainsboro; width: 10%" value="{{ e['expression'] }}" readonly="readonly" />
       <input style="width: 100px; background-color: gainsboro;" value="{{ e['color'] }}" readonly="readonly" />
