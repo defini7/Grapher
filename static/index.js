@@ -9,6 +9,18 @@ let size = {
 
 let elems;
 
+let startPan = {
+    x: 0,
+    y: 0
+}
+
+let panStarted = false;
+
+let offset = {
+    x: 0,
+    y: 0
+}
+
 function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
@@ -81,15 +93,26 @@ function drawAxis() {
     context.lineWidth = 2
     context.strokeStyle = '#222'
 
-    context.moveTo(-x, 0)
-    context.lineTo(x, 0)
+    context.moveTo(-x, offset.y)
+    context.lineTo(-x + offset.x, offset.y)
 
-    context.moveTo(0, -y)
-    context.lineTo(0, y)
+    context.moveTo(-x + offset.x, offset.y)
+    context.lineTo(x + offset.x, offset.y)
+
+    context.moveTo(x + offset.x, offset.y)
+    context.lineTo(x, offset.y)
+
+    context.moveTo(offset.x, -y)
+    context.lineTo(offset.x, -y + offset.y)
+
+    context.moveTo(offset.x, -y + offset.y)
+    context.lineTo(offset.x, y + offset.y)
+
+    context.moveTo(offset.x, y + offset.y)
+    context.lineTo(offset.x, y)
 
     context.stroke()
     context.closePath()
-
 }
 
 function drawGrid(xSize = 10, ySize = xSize) {
@@ -110,29 +133,59 @@ function drawGrid(xSize = 10, ySize = xSize) {
             const dX = gX + xSize
             const dY = gY + ySize
 
-            context.moveTo(gX, gY)
-            context.lineTo(gX, dY)
+            context.moveTo(gX + offset.x, gY + offset.y)
+            context.lineTo(gX + offset.x, dY + offset.y)
 
-            context.moveTo(gX, gY)
-            context.lineTo(gX, -dY)
+            context.moveTo(gX + offset.x, gY + offset.y)
+            context.lineTo(gX + offset.x, -dY + offset.y)
 
-            context.moveTo(-gX, gY)
-            context.lineTo(-gX, dY)
+            context.moveTo(gX + offset.x, gY)
+            context.lineTo(gX + offset.x, -dY)
 
-            context.moveTo(-gX, gY)
-            context.lineTo(-gX, -dY)
+            context.moveTo(gX + offset.x, gY)
+            context.lineTo(gX + offset.x, dY)
 
-            context.moveTo(gX, gY)
-            context.lineTo(dX, gY)
+            //////
 
-            context.moveTo(gX, gY)
-            context.lineTo(-dX, gY)
+            context.moveTo(-gX + offset.x, gY + offset.y)
+            context.lineTo(-gX + offset.x, dY + offset.y)
 
-            context.moveTo(gX, -gY)
-            context.lineTo(dX, -gY)
+            context.moveTo(-gX + offset.x, gY + offset.y)
+            context.lineTo(-gX + offset.x, -dY + offset.y)
 
-            context.moveTo(gX, -gY)
-            context.lineTo(-dX, -gY)
+            context.moveTo(-gX + offset.x, gY)
+            context.lineTo(-gX + offset.x, dY)
+
+            context.moveTo(-gX + offset.x, gY)
+            context.lineTo(-gX + offset.x, -dY)
+
+            //////
+
+            context.moveTo(gX + offset.x, gY + offset.y)
+            context.lineTo(dX + offset.x, gY + offset.y)
+
+            context.moveTo(gX + offset.x, gY + offset.y)
+            context.lineTo(-dX + offset.x, gY + offset.y)
+
+            context.moveTo(gX, gY + offset.y)
+            context.lineTo(dX, gY + offset.y)
+
+            context.moveTo(gX, gY + offset.y)
+            context.lineTo(-dX, gY + offset.y)
+
+            //////
+
+            context.moveTo(gX + offset.x, -gY + offset.y)
+            context.lineTo(dX + offset.x, -gY + offset.y)
+
+            context.moveTo(gX + offset.x, -gY + offset.y)
+            context.lineTo(-dX + offset.x, -gY + offset.y)
+
+            context.moveTo(gX, -gY + offset.y)
+            context.lineTo(dX, -gY + offset.y)
+
+            context.moveTo(gX, -gY + offset.y)
+            context.lineTo(-dX, -gY + offset.y)
         }
     }
     context.stroke()
@@ -185,10 +238,36 @@ function wheel(e) {
     state.scale = Math.min(4, Math.max(scale, 0.5))
 }
 
+function getMousePos(canvas, evt) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    }
+}
+
 window.onload = function () {
     canvas = document.getElementById('canvas')
     if (canvas) {
         context = canvas.getContext('2d')
+
+        canvas.addEventListener('mousedown', function (evt) {
+            startPan = getMousePos(canvas, evt)
+            panStarted = true
+        })
+
+        canvas.addEventListener('mousemove', function (evt) {
+            if (panStarted) {
+                let mouse = getMousePos(canvas, evt)
+                offset.x = mouse.x - startPan.x
+                offset.y = mouse.y - startPan.y
+            }
+            drawAll()
+        })
+
+        canvas.addEventListener('mouseup', function (evt) {
+            panStarted = false
+        })
     }
 
     errorElement = document.querySelector('[data-error]')
