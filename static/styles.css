@@ -31,6 +31,7 @@ canvas {
     left: 0;
     right: 0;
     bottom: 0;
+    display: block;
 }
 
 [data-error] {
@@ -121,4 +122,22 @@ button {
 input[type=checkbox] {
     width: 5vw;
     height: 5vh;
+}
+
+p[data-error], div[id=div-error] input {
+    opacity: 1;
+    animation: text-visible 0.0001s linear forwards;
+    animation-delay: 1.5s;
+}
+
+div[id=div-error] {
+    display: flex;
+}
+
+div[id=div-error] input {
+    width: 50px;
+    height: 35px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: rgb(189, 77, 83);
 }

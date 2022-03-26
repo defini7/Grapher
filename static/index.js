@@ -7,14 +7,14 @@ let size = {
     y: 0
 }
 
-let elems;
+let elems
 
 let startPan = {
     x: 0,
     y: 0
 }
 
-let panStarted = false;
+let panStarted = false
 
 let offset = {
     x: 0,
@@ -55,7 +55,7 @@ function drawAll() {
 
 function clear() {
     const { x, y, width, height } = size
-    context?.clearRect(-x, -y, width, height)
+    context?.clearRect(-x * 2, -y * 2, width * 2, height * 2)
 }
 
 function restoreState() {
@@ -72,7 +72,7 @@ function restoreState() {
 }
 
 function saveState() {
-    localStorage.setItem('local-state', JSON.stringify({ ...state }));
+    localStorage.setItem('local-state', JSON.stringify({ ...state }))
 }
 
 function resize() {
@@ -121,73 +121,60 @@ function drawGrid(xSize = 10, ySize = xSize) {
     const { x, y } = size
     const { scale } = state
 
-    context.lineWidth = 1
-
     xSize *= scale
     ySize *= scale
+
     context.beginPath()
     context.lineWidth = 1
     context.strokeStyle = '#eee'
+
     for (let gX = 0; gX < x; gX += xSize) {
         for (let gY = 0; gY < y; gY += ySize) {
             const dX = gX + xSize
             const dY = gY + ySize
 
-            context.moveTo(gX + offset.x, gY + offset.y)
-            context.lineTo(gX + offset.x, dY + offset.y)
+            /* top left */
 
-            context.moveTo(gX + offset.x, gY + offset.y)
-            context.lineTo(gX + offset.x, -dY + offset.y)
+            // vertical
+            context.moveTo(-dX + offset.x, offset.y)
+            context.lineTo(-dX + offset.x, -dY + offset.y)
 
-            context.moveTo(gX + offset.x, gY)
-            context.lineTo(gX + offset.x, -dY)
+            // horizontal
+            context.moveTo(offset.x, -dY + offset.y)
+            context.lineTo(-x + offset.x, -dY + offset.y)
 
-            context.moveTo(gX + offset.x, gY)
-            context.lineTo(gX + offset.x, dY)
+            /* top right */
 
-            //////
+            // vertical
+            context.moveTo(dX + offset.x, offset.y)
+            context.lineTo(dX + offset.x, -dY + offset.y)
 
-            context.moveTo(-gX + offset.x, gY + offset.y)
-            context.lineTo(-gX + offset.x, dY + offset.y)
+            // horizontal
+            context.moveTo(0 + offset.x, -dY + offset.y)
+            context.lineTo(x + offset.x, -dY + offset.y)
 
-            context.moveTo(-gX + offset.x, gY + offset.y)
-            context.lineTo(-gX + offset.x, -dY + offset.y)
+            /* bottom left */
 
-            context.moveTo(-gX + offset.x, gY)
-            context.lineTo(-gX + offset.x, dY)
+            // vertical
+            context.moveTo(-dX + offset.x, offset.y)
+            context.lineTo(-dX + offset.x, dY + offset.y)
 
-            context.moveTo(-gX + offset.x, gY)
-            context.lineTo(-gX + offset.x, -dY)
+            // horizontal
+            context.moveTo(offset.x, dY + offset.y)
+            context.lineTo(-x + offset.x, dY + offset.y)
 
-            //////
+            /* bottom right */
 
-            context.moveTo(gX + offset.x, gY + offset.y)
-            context.lineTo(dX + offset.x, gY + offset.y)
+            // vertical
+            context.moveTo(dX + offset.x, offset.y)
+            context.lineTo(dX + offset.x, dY + offset.y)
 
-            context.moveTo(gX + offset.x, gY + offset.y)
-            context.lineTo(-dX + offset.x, gY + offset.y)
-
-            context.moveTo(gX, gY + offset.y)
-            context.lineTo(dX, gY + offset.y)
-
-            context.moveTo(gX, gY + offset.y)
-            context.lineTo(-dX, gY + offset.y)
-
-            //////
-
-            context.moveTo(gX + offset.x, -gY + offset.y)
-            context.lineTo(dX + offset.x, -gY + offset.y)
-
-            context.moveTo(gX + offset.x, -gY + offset.y)
-            context.lineTo(-dX + offset.x, -gY + offset.y)
-
-            context.moveTo(gX, -gY + offset.y)
-            context.lineTo(dX, -gY + offset.y)
-
-            context.moveTo(gX, -gY + offset.y)
-            context.lineTo(-dX, -gY + offset.y)
+            // horizontal
+            context.moveTo(0 + offset.x, dY + offset.y)
+            context.lineTo(x + offset.x, dY + offset.y)
         }
     }
+
     context.stroke()
     context.closePath()
 }
@@ -195,10 +182,10 @@ function drawGrid(xSize = 10, ySize = xSize) {
 function onDrawClick(e) {
     if (e instanceof KeyboardEvent) {
         if (e.key == 'Enter')
-            onDrawClick();
+            onDrawClick()
     } else {
-        state.error = '';
-        drawAll();
+        state.error = ''
+        drawAll()
     }
 }
 
@@ -219,7 +206,7 @@ function drawGraph(expression, color = 'red', width = 3) {
             let percent = (i / points * 2 - 1) * x * verticalSize
             let result = math.evaluate(expression, { x: percent * 0.01 }) * 100
 
-            context[i ? 'lineTo' : 'moveTo'](percent * scale, -result * scale)
+            context[i ? 'lineTo' : 'moveTo'](percent * scale + offset.x, -result * scale + offset.y)
         } catch (e) {
             state.error = `${e}`
             break
@@ -234,12 +221,12 @@ function drawGraph(expression, color = 'red', width = 3) {
 function wheel(e) {
     let { scale } = state
 
-    scale += e.deltaY * 0.02
-    state.scale = Math.min(4, Math.max(scale, 0.5))
+    scale += e.deltaY * 0.005
+    state.scale = Math.min(10, Math.max(scale, 0.1))
 }
 
 function getMousePos(canvas, evt) {
-    let rect = canvas.getBoundingClientRect();
+    let rect = canvas.getBoundingClientRect()
     return {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top
@@ -248,6 +235,7 @@ function getMousePos(canvas, evt) {
 
 window.onload = function () {
     canvas = document.getElementById('canvas')
+
     if (canvas) {
         context = canvas.getContext('2d')
 
@@ -259,10 +247,15 @@ window.onload = function () {
         canvas.addEventListener('mousemove', function (evt) {
             if (panStarted) {
                 let mouse = getMousePos(canvas, evt)
-                offset.x = mouse.x - startPan.x
-                offset.y = mouse.y - startPan.y
+                offset.x -= startPan.x - mouse.x
+                offset.y -= startPan.y - mouse.y
+                startPan = mouse
+                size.x += mouse.x
+                size.y += mouse.y
+                size.width += mouse.x
+                size.height += mouse.y
+                drawAll()
             }
-            drawAll()
         })
 
         canvas.addEventListener('mouseup', function (evt) {
@@ -276,6 +269,7 @@ window.onload = function () {
 
     state = new Proxy({
         scale: 1,
+        error: '',
         ...restoreState()
     }, {
         get(target, key) {
@@ -288,16 +282,21 @@ window.onload = function () {
             if (key == 'scale')
                 drawAll()
 
+            if (key == 'error') {
+                if (state.error != '') {
+                    document.querySelector('div[id=div-error]').removeAttribute('hidden')
+                    document.querySelector('p[data-error]').value = state.error
+                    document.querySelector('div[id=div-error] input').value = 'Ok'
+                }
+            }
+
             return true
         }
     })
 
-    if (context) {
+    if (canvas) {
         resize()
         addEventListener('resize', resize)
-    }
-
-    if (canvas) {
         canvas.addEventListener('wheel', wheel)
         errorElement.innerText = state.error
         appendBtnElement.addEventListener('click', appendRow)
@@ -345,6 +344,12 @@ function delete_graph(id) {
     fetch('/delete/' + id, {
         method: 'POST'
     })
+
     document.getElementById(id).remove()
     window.location.replace('/library')
+}
+
+function hide_error() {
+    state.error = ''
+    document.querySelector('div[id=div-error]').setAttribute('hidden', '')
 }

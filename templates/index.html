@@ -26,8 +26,9 @@
             <button data-draw id="draw">Draw</button>
         </div>
 
-        <div class="row">
-            <p data-error hidden>Invalid input</p>
+        <div class="row" hidden id="div-error">
+            <p data-error></p>
+            <input type="button" onclick="hide_error()" />
         </div>
     </div>
 </div>
