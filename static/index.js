@@ -21,6 +21,8 @@ let offset = {
     y: 0
 }
 
+let mouse = offset;
+
 function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
@@ -34,9 +36,41 @@ function appendRow() {
     document.querySelector('[data-expressions]').appendChild(clone)
 }
 
+function getMousePos(canvas, evt) {
+    let rect = canvas.getBoundingClientRect()
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    }
+}
+
 function drawAll() {
     clear()
+
+    size.x += offset.x
+    size.y += offset.y
     drawGrid(50)
+    size.x -= offset.x
+    size.y -= offset.y
+
+    size.x -= offset.x
+    size.y -= offset.y
+    drawGrid(50)
+    size.x += offset.x
+    size.y += offset.y
+
+    size.x += offset.x
+    size.y -= offset.y
+    drawGrid(50)
+    size.x -= offset.x
+    size.y += offset.y
+
+    size.x -= offset.x
+    size.y += offset.y
+    drawGrid(50)
+    size.x += offset.x
+    size.y -= offset.y
+
     drawAxis()
 
     document.querySelector('[data-expressions]').querySelectorAll('.expression')
@@ -152,7 +186,7 @@ function drawGrid(xSize = 10, ySize = xSize) {
             context.lineTo(dX + offset.x, -dY + offset.y)
 
             // horizontal
-            context.moveTo(0 + offset.x, -dY + offset.y)
+            context.moveTo(offset.x, -dY + offset.y)
             context.lineTo(x + offset.x, -dY + offset.y)
 
             /* bottom left */
@@ -172,7 +206,7 @@ function drawGrid(xSize = 10, ySize = xSize) {
             context.lineTo(dX + offset.x, dY + offset.y)
 
             // horizontal
-            context.moveTo(0 + offset.x, dY + offset.y)
+            context.moveTo(offset.x, dY + offset.y)
             context.lineTo(x + offset.x, dY + offset.y)
         }
     }
@@ -226,14 +260,6 @@ function wheel(e) {
     state.scale = Math.min(10, Math.max(scale, 0.1))
 }
 
-function getMousePos(canvas, evt) {
-    let rect = canvas.getBoundingClientRect()
-    return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    }
-}
-
 window.onload = function () {
     canvas = document.getElementById('canvas')
 
@@ -247,15 +273,11 @@ window.onload = function () {
 
         canvas.addEventListener('mousemove', function (evt) {
             if (panStarted) {
-                let mouse = getMousePos(canvas, evt)
+                mouse = getMousePos(canvas, evt)
                 offset.x -= startPan.x - mouse.x
                 offset.y -= startPan.y - mouse.y
-                startPan = mouse
-                size.x += mouse.x
-                size.y += mouse.y
-                size.width += mouse.x
-                size.height += mouse.y
                 drawAll()
+                startPan = mouse
             }
         })
 
