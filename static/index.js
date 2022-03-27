@@ -257,7 +257,7 @@ function wheel(e) {
     let { scale } = state
 
     scale += e.deltaY * 0.005
-    state.scale = Math.min(10, Math.max(scale, 0.1))
+    state.scale = Math.min(10, Math.max(scale, 0.4))
 }
 
 window.onload = function () {

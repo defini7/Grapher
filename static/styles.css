@@ -125,8 +125,10 @@ button {
 }
 
 input[type=checkbox] {
-    width: 5vw;
-    height: 5vh;
+    width: 45px;
+    height: 45px;
+    position: fixed;
+    margin-left: 5px;
 }
 
 p[data-error] {
