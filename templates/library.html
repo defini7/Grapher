@@ -11,7 +11,7 @@
       <input id="input-expression" style="background-color: gainsboro;" value="{{ e['name'] }}" readonly="readonly" />
       <input style="background-color: gainsboro; width: 10%" value="{{ e['expression'] }}" readonly="readonly" />
       <input style="width: 100px; background-color: gainsboro;" value="{{ e['color'] }}" readonly="readonly" />
-      <input type="button" onclick="delete_graph(`{{ e['id'] }}`)" value="Delete" id="btn-delete" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+      <input type="button" onclick="deleteGraph(`{{ e['id'] }}`)" value="Delete" id="btn-delete" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
       <input type="checkbox" value="{{ e['id'] }}" />
     </div>
     {% endfor %}

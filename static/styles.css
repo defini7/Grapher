@@ -124,10 +124,21 @@ input[type=checkbox] {
     height: 5vh;
 }
 
-p[data-error], div[id=div-error] input {
-    opacity: 1;
-    animation: text-visible 0.0001s linear forwards;
-    animation-delay: 1.5s;
+p[data-error] {
+    animation-duration: 1s;
+    animation-name: slidein;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+  
+@keyframes slidein {
+    from {
+        margin-left: 100%;
+    }
+
+    to {
+        margin-left: 0%;
+    }
 }
 
 div[id=div-error] {
@@ -137,7 +148,8 @@ div[id=div-error] {
 div[id=div-error] input {
     width: 50px;
     height: 35px;
-    text-align: center;
-    border-radius: 10px;
     background-color: rgb(189, 77, 83);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-left: 5px;
 }

@@ -24,10 +24,12 @@ let offset = {
 function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
+
     clone.querySelector('[data-delete]').addEventListener('click', _ => {
         clone.remove()
         drawAll()
     })
+
     clone.removeAttribute('hidden')
     document.querySelector('[data-expressions]').appendChild(clone)
     drawAll()
@@ -55,7 +57,7 @@ function drawAll() {
 
 function clear() {
     const { x, y, width, height } = size
-    context?.clearRect(-x * 2, -y * 2, width * 2, height * 2)
+    context.clearRect(-x, -y, width, height)
 }
 
 function restoreState() {
@@ -81,7 +83,7 @@ function resize() {
     size.height = canvas.height = height
     size.x = width * 0.5
     size.y = height * 0.5
-    context?.translate(size.x, size.y)
+    context.translate(size.x, size.y)
     drawAll()
 }
 
@@ -89,9 +91,10 @@ function drawAxis() {
     if (!context) return
     const { x, y } = size
 
-    context.beginPath()
     context.lineWidth = 2
     context.strokeStyle = '#222'
+
+    context.beginPath()
 
     context.moveTo(-x, offset.y)
     context.lineTo(-x + offset.x, offset.y)
@@ -124,9 +127,9 @@ function drawGrid(xSize = 10, ySize = xSize) {
     xSize *= scale
     ySize *= scale
 
-    context.beginPath()
     context.lineWidth = 1
     context.strokeStyle = '#eee'
+    context.beginPath()
 
     for (let gX = 0; gX < x; gX += xSize) {
         for (let gY = 0; gY < y; gY += ySize) {
@@ -194,7 +197,7 @@ function drawGraph(expression, color = 'red', width = 3) {
     if (!context || !expression) return
 
     const { x } = size
-    const verticalSize = (x / (50 * scale))
+    const verticalSize = x / (50 * scale)
     const points = 100 * verticalSize
 
     context.beginPath()
@@ -214,7 +217,6 @@ function drawGraph(expression, color = 'red', width = 3) {
     }
 
     context.stroke()
-
     context.closePath()
 }
 
@@ -283,10 +285,9 @@ window.onload = function () {
                 drawAll()
 
             if (key == 'error') {
-                if (state.error != '') {
+                if (value != '') {
                     document.querySelector('div[id=div-error]').removeAttribute('hidden')
-                    document.querySelector('p[data-error]').value = state.error
-                    document.querySelector('div[id=div-error] input').value = 'Ok'
+                    document.querySelector('p[data-error]').innerHTML = state.error
                 }
             }
 
@@ -302,6 +303,10 @@ window.onload = function () {
         appendBtnElement.addEventListener('click', appendRow)
         drawBtnElement.addEventListener('click', onDrawClick)
     }
+
+    document.querySelector('p[data-error]').addEventListener('animationend', function () {
+        document.querySelector('div[id=div-error] input').removeAttribute('hidden')
+    })
 }
 
 function save() {
@@ -340,7 +345,7 @@ function load() {
     document.getElementById('form-library').submit()
 }
 
-function delete_graph(id) {
+function deleteGraph(id) {
     fetch('/delete/' + id, {
         method: 'POST'
     })
@@ -349,7 +354,7 @@ function delete_graph(id) {
     window.location.replace('/library')
 }
 
-function hide_error() {
-    state.error = ''
+function hideError() {
     document.querySelector('div[id=div-error]').setAttribute('hidden', '')
+    document.querySelector('div[id=div-error] input').setAttribute('hidden', '')
 }
