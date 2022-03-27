@@ -111,12 +111,17 @@ canvas {
     border-color: rgb(69, 194, 75);
 }
 
+div[data-template] {
+    animation-duration: 1s;
+    animation-name: slidein;
+}
+
 input, button {
     padding: 10px 20px;
 }
 
 button {
-    cursor: pointer
+    cursor: pointer;
 }
 
 input[type=checkbox] {
