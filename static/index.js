@@ -32,7 +32,6 @@ function appendRow() {
 
     clone.removeAttribute('hidden')
     document.querySelector('[data-expressions]').appendChild(clone)
-    drawAll()
 }
 
 function drawAll() {
