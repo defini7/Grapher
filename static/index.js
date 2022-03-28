@@ -94,7 +94,7 @@ function drawAll() {
 
     document.querySelector('[data-expressions]').querySelectorAll('.expression')
         .forEach(function (elem) {
-            const expression = elem.querySelector('input[name="expression"]').value.toLowerCase() || ''
+            const expression = elem.querySelector('input[name="expression"]').value || ''
             const color = elem.querySelector('input[name="color"]').value || 'red'
 
             if (!expression) return
