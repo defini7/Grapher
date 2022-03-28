@@ -1,4 +1,4 @@
-let canvas, context, errorElement, appendBtnElement, drawBtnElement, state
+let canvas, context, errorElement, appendBtnElement, drawBtnElement, state, elems
 
 let size = {
     width: 0,
@@ -6,8 +6,6 @@ let size = {
     x: 0,
     y: 0
 }
-
-let elems
 
 let startPan = {
     x: 0,
@@ -21,13 +19,27 @@ let offset = {
     y: 0
 }
 
-let mouse = offset;
+let alphas = {
+    'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0,
+    'f': 0, 'g': 0, 'h': 0, 'i': 0, 'j': 0,
+    'k': 0, 'l': 0, 'm': 0, 'n': 0, 'o': 0,
+    'p': 0, 'q': 0, 'r': 0, 's': 0, 't': 0,
+    'u': 0, 'v': 0, 'w': 0, 'x': 0, 'z': 0
+}
 
 function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
 
     clone.querySelector('[data-delete]').addEventListener('click', _ => {
+        let expr = clone.querySelector('input[name="expression"]').value
+        for (let i = 0; i < expr.length; i++) {
+            let s = document.getElementById('div-' + expr[i])
+            if (s != null) {
+                s.remove()
+            }
+        }
+
         clone.remove()
         drawAll()
     })
@@ -225,6 +237,10 @@ function onDrawClick(e) {
     }
 }
 
+function isAlpha(val) {
+    return /^[a-zA-Z]*$/gi.test(val)
+}
+
 function drawGraph(expression, color = 'red', width = 3) {
     const { scale } = state
     if (!context || !expression) return
@@ -237,10 +253,48 @@ function drawGraph(expression, color = 'red', width = 3) {
     context.strokeStyle = color
     context.lineWidth = width
 
+    for (let i = 0; i < expression.length; i++) {
+        if (isAlpha(expression[i]) && (!isAlpha(expression[i - 1]) || expression[i - 1] == undefined) && (!isAlpha(expression[i + 1]) || expression[i + 1] == undefined)) {
+            let s = document.getElementById(expression[i])
+            console.log(expression[i])
+            if (s == null) {
+                if (expression[i] != 'x') {
+                    let slider = document.createElement('input')
+                    let name = document.createElement('b')
+                    let div = document.createElement('div')
+
+                    name.innerHTML = expression[i]
+
+                    div.setAttribute('class', 'div-slider')
+                    div.setAttribute('id', 'div-' + expression[i])
+
+                    slider.setAttribute('type', 'range')
+                    slider.setAttribute('min', '-10')
+                    slider.setAttribute('max', '10')
+                    slider.setAttribute('value', '0')
+                    slider.setAttribute('id', expression[i])
+                    slider.setAttribute('class', 'slider')
+                    slider.addEventListener('onchange', _ => {
+                        drawAll()
+                    })
+
+                    div.appendChild(name)
+                    div.appendChild(slider)
+                    document.querySelector('div[data-expressions]').appendChild(div)
+
+                    alphas[expression[i]] = 0
+                }
+            } else {
+                alphas[expression[i]] = s.value
+            }
+        }
+    }
+
     for (let i = 0; i <= points; i++) {
         try {
             let percent = (i / points * 2 - 1) * x * verticalSize
-            let result = math.evaluate(expression, { x: percent * 0.01 }) * 100
+            alphas.x = percent * 0.01
+            let result = math.evaluate(expression, alphas) * 100
 
             context[i ? 'lineTo' : 'moveTo'](percent * scale + offset.x, -result * scale + offset.y)
         } catch (e) {
@@ -266,14 +320,14 @@ window.onload = function () {
     if (canvas) {
         context = canvas.getContext('2d')
 
-        canvas.addEventListener('mousedown', function (evt) {
+        canvas.addEventListener('mousedown', evt => {
             startPan = getMousePos(canvas, evt)
             panStarted = true
         })
 
-        canvas.addEventListener('mousemove', function (evt) {
+        canvas.addEventListener('mousemove', evt => {
             if (panStarted) {
-                mouse = getMousePos(canvas, evt)
+                let mouse = getMousePos(canvas, evt)
                 offset.x -= startPan.x - mouse.x
                 offset.y -= startPan.y - mouse.y
                 drawAll()
@@ -281,7 +335,7 @@ window.onload = function () {
             }
         })
 
-        canvas.addEventListener('mouseup', function (evt) {
+        canvas.addEventListener('mouseup', evt => {
             panStarted = false
         })
     }
@@ -325,7 +379,7 @@ window.onload = function () {
         drawBtnElement.addEventListener('click', onDrawClick)
     }
 
-    document.querySelector('p[data-error]').addEventListener('animationend', function () {
+    document.querySelector('p[data-error]').addEventListener('animationend', () => {
         document.querySelector('div[id=div-error] input').removeAttribute('hidden')
     })
 }
@@ -334,7 +388,7 @@ function save() {
     let data = { expressions: [] }
 
     document.querySelector('[data-expressions]').querySelectorAll('.expression')
-        .forEach(function (elem) {
+        .forEach(elem => {
             const expression = elem.querySelector('input[name="expression"]').value.toLowerCase() || ''
             const color = elem.querySelector('input[name="color"]').value || 'red'
 

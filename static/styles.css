@@ -131,6 +131,15 @@ input[type=checkbox] {
     margin-left: 5px;
 }
 
+.div-slider {
+    display: flex;
+}
+
+.slider {
+    display: flex;
+    width: 70%;
+}
+
 p[data-error] {
     animation-duration: 1s;
     animation-name: slidein;
