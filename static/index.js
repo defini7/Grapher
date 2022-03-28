@@ -31,6 +31,13 @@ function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
 
+    clone.querySelector('input[name="expression"]').addEventListener('change', _ => {
+        document.querySelectorAll('div[class=div-slider]')
+            .forEach(elem => {
+                elem.remove()
+            })
+    })
+
     clone.querySelector('[data-delete]').addEventListener('click', _ => {
         let expr = clone.querySelector('input[name="expression"]').value
         for (let i = 0; i < expr.length; i++) {
@@ -256,7 +263,6 @@ function drawGraph(expression, color = 'red', width = 3) {
     for (let i = 0; i < expression.length; i++) {
         if (isAlpha(expression[i]) && (!isAlpha(expression[i - 1]) || expression[i - 1] == undefined) && (!isAlpha(expression[i + 1]) || expression[i + 1] == undefined)) {
             let s = document.getElementById(expression[i])
-            console.log(expression[i])
             if (s == null) {
                 if (expression[i] != 'x') {
                     let slider = document.createElement('input')
@@ -274,7 +280,7 @@ function drawGraph(expression, color = 'red', width = 3) {
                     slider.setAttribute('value', '0')
                     slider.setAttribute('id', expression[i])
                     slider.setAttribute('class', 'slider')
-                    slider.addEventListener('onchange', _ => {
+                    slider.addEventListener('input', _ => {
                         drawAll()
                     })
 
