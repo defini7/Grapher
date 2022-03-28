@@ -114,6 +114,7 @@ canvas {
 div[data-template] {
     animation-duration: 1s;
     animation-name: slidein;
+    display: flex;
 }
 
 input, button {
@@ -149,6 +150,7 @@ input[type=checkbox] {
 p[data-error] {
     animation-duration: 1s;
     animation-name: slidein;
+    display: flex;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
