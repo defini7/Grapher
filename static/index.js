@@ -286,6 +286,7 @@ function drawGraph(expression, color = 'red', width = 3) {
 
                     div.appendChild(name)
                     div.appendChild(slider)
+
                     document.querySelector('div[data-expressions]').appendChild(div)
 
                     alphas[expression[i]] = 1
