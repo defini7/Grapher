@@ -12,6 +12,7 @@ body {
     height: 93.8vh;
     width: 26%;
     margin-top: 6.2vh;
+    overflow-y: scroll;
 }
 
 .controll {
@@ -22,6 +23,12 @@ body {
 
 input[type=color] {
     height: inherit;
+    background-color: gainsboro;
+    padding: 0px;
+}
+
+input[name=expression] {
+    background-color: gainsboro;
 }
 
 #app {
@@ -178,4 +185,5 @@ div[id=div-error] input {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     margin-left: 5px;
+    padding: 0px;
 }
