@@ -277,7 +277,7 @@ function drawGraph(expression, color = 'red', width = 3) {
                     slider.setAttribute('type', 'range')
                     slider.setAttribute('min', '-10')
                     slider.setAttribute('max', '10')
-                    slider.setAttribute('value', '0')
+                    slider.setAttribute('value', '1')
                     slider.setAttribute('id', expression[i])
                     slider.setAttribute('class', 'slider')
                     slider.addEventListener('input', _ => {
