@@ -13,6 +13,7 @@ body {
     width: 23%;
     margin-top: 6.2vh;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .controll {
@@ -106,7 +107,7 @@ canvas {
     border-bottom-left-radius: 10px;
 }
 
-#btn-delete {
+.btn-delete {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background-color: rgb(189, 77, 83);
@@ -138,6 +139,14 @@ button {
                                       rgba(0, 0, 0, 0));
     box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
                 inset -2px -2px 3px rgba(0, 0, 0, .6);
+    
+    filter: brightness(1.0);
+
+    border: 0;
+}
+
+button:hover {
+    filter: brightness(1.1);
 }
 
 input[type=checkbox] {
