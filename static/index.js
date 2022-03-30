@@ -42,9 +42,7 @@ function appendRow() {
         let expr = clone.querySelector('input[name="expression"]').value
         for (let i = 0; i < expr.length; i++) {
             let s = document.getElementById('div-' + expr[i])
-            if (s != null) {
-                s.remove()
-            }
+            if (s != null) s.remove()
         }
 
         clone.remove()
@@ -123,6 +121,27 @@ function restoreState() {
         console.log(e)
     }
     return {}
+}
+
+function setDefault(evt) {
+    state.scale = 1;
+    state.error = '';
+
+    offset.x = 0
+    offset.y = 0
+
+    size.width = 0
+    size.height = 0
+
+    size.x = 0
+    size.y = 0
+
+    startPan.x = 0
+    startPan.y = 0
+
+    panStarted = false
+
+    resize()
 }
 
 function saveState() {
@@ -318,7 +337,11 @@ function wheel(e) {
     let { scale } = state
 
     scale += e.deltaY * 0.005
-    state.scale = Math.min(10, Math.max(scale, 0.4))
+    setScale(scale)
+}
+
+function setScale(value) {
+    state.scale = Math.min(10, Math.max(value, 0.4))
 }
 
 window.onload = function () {
@@ -345,50 +368,50 @@ window.onload = function () {
         canvas.addEventListener('mouseup', evt => {
             panStarted = false
         })
-    }
 
-    errorElement = document.querySelector('[data-error]')
-    appendBtnElement = document.querySelector('[data-append]')
-    drawBtnElement = document.querySelector('[data-draw]')
+        errorElement = document.querySelector('[data-error]')
+        appendBtnElement = document.querySelector('[data-append]')
+        drawBtnElement = document.querySelector('[data-draw]')
 
-    state = new Proxy({
-        scale: 1,
-        error: '',
-        ...restoreState()
-    }, {
-        get(target, key) {
-            return target[key]
-        },
-        set(target, key, value) {
-            target[key] = value
-            saveState()
+        state = new Proxy({
+            scale: 1,
+            error: '',
+            ...restoreState()
+        }, {
+            get(target, key) {
+                return target[key]
+            },
+            set(target, key, value) {
+                target[key] = value
+                saveState()
 
-            if (key == 'scale')
-                drawAll()
+                if (key == 'scale')
+                    drawAll()
 
-            if (key == 'error') {
-                if (value != '') {
-                    document.querySelector('div[id=div-error]').removeAttribute('hidden')
-                    document.querySelector('p[data-error]').innerHTML = state.error
+                if (key == 'error') {
+                    if (value != '') {
+                        document.querySelector('div[id=div-error]').removeAttribute('hidden')
+                        document.querySelector('p[data-error]').innerHTML = state.error
+                    }
                 }
+
+                return true
             }
+        })
 
-            return true
-        }
-    })
+        setDefault()
 
-    if (canvas) {
         resize()
         addEventListener('resize', resize)
         canvas.addEventListener('wheel', wheel)
         errorElement.innerText = state.error
         appendBtnElement.addEventListener('click', appendRow)
         drawBtnElement.addEventListener('click', onDrawClick)
-    }
 
-    document.querySelector('p[data-error]').addEventListener('animationend', () => {
-        document.querySelector('div[id=div-error] input').removeAttribute('hidden')
-    })
+        errorElement.addEventListener('animationend', () => {
+            document.querySelector('div[id=div-error] input').removeAttribute('hidden')
+        })
+    }
 }
 
 function save() {

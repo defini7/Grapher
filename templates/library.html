@@ -10,8 +10,8 @@
     <div class="expression text-center" id="{{ e['id'] }}">
       <input id="input-expression" style="background-color: gainsboro;" value="{{ e['name'] }}" readonly="readonly" />
       <input style="background-color: gainsboro; width: 10%" value="{{ e['expression'] }}" readonly="readonly" />
-      <input style="width: 100px; background-color: gainsboro;" value="{{ e['color'] }}" readonly="readonly" />
-      <input type="button" onclick="deleteGraph(`{{ e['id'] }}`)" value="Delete" id="btn-delete" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+      <input type="color" value="{{ e['color'] }}" readonly="readonly" />
+      <button onclick="deleteGraph(`{{ e['id'] }}`)" id="btn-delete" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px; margin-left: 2.8%;">Delete</button>
       <input type="checkbox" value="{{ e['id'] }}" />
     </div>
     {% endfor %}
@@ -19,7 +19,7 @@
   <form action="/library" method="POST" id="form-library">
     <div class="expression text-center">
       <input type="text" name="secret-field" id="ids" hidden />
-      <input type="button" class="btn-submit" style="border-bottom-left-radius: 10px; border-top-left-radius: 10px; margin-top: 10px;" onclick="load()" value="Load" />
+      <button class="btn-submit" style="border-bottom-left-radius: 10px; border-top-left-radius: 10px; margin-top: 10px;" onclick="load()">Load</button>
     </div>
   </form>
 {% endblock %}
