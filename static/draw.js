@@ -13,7 +13,7 @@ function collectPointsFor(expr) {
         try {
             let percent = (i / points_count * 2 - 1) * x * verticalSize
             alphas.x = percent * 0.01
-            let result = math.evaluate(expr, alphas) * 1000
+            let result = math.evaluate(expr, alphas) * 100
 
             points.push({
                 x: percent,
