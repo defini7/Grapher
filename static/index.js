@@ -1,4 +1,6 @@
-let canvas, context, errorElement, appendBtnElement, drawBtnElement, state, elems
+let canvas
+let context
+let state
 
 let size = {
     width: 0,
@@ -52,8 +54,8 @@ window.onload = function () {
             panStarted = false
         })
 
-        errorElement = document.querySelector('[data-error]')
-        appendBtnElement = document.querySelector('[data-append]')
+        let errorElement = document.querySelector('[data-error]')
+        let appendBtnElement = document.querySelector('[data-append]')
 
         state = new Proxy({
             scale: 1,
