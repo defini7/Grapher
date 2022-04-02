@@ -13,7 +13,7 @@ body {
     width: 23%;
     margin-top: 6.2vh;
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-x: scroll;
 }
 
 .controll {
@@ -57,7 +57,7 @@ canvas {
     padding: 5px 20px;
     border-radius: 10px;
 }
-  
+
 * {
     margin: 0;
     padding: 0;
@@ -67,13 +67,13 @@ canvas {
 }
 
 .sign-input {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
     background-color: gainsboro;
 }
 
 .sign-div {
     width: 30%;
-    margin-top: 20px; 
+    margin-top: 20px;
     margin-left: 35%;
 }
 
@@ -86,20 +86,14 @@ canvas {
     display: table-column;
 }
 
-#append, #draw {
+#append {
     border-radius: 10px;
 }
 
 #append {
-    background-color:rgb(123, 174, 190);
+    background-color: rgb(123, 174, 190);
     border-color: rgb(123, 174, 190);
-    margin-right: 20px;
-    margin-left: 20%;
-}
-
-#draw {
-    background-color: rgb(83, 172, 138);
-    border-color: rgb(83, 172, 138);
+    margin-left: 35%;
 }
 
 #input-expression {
@@ -127,19 +121,20 @@ div[data-template] {
     display: flex;
 }
 
-input, button {
+input,
+button {
     padding: 10px 20px;
 }
 
 button {
     cursor: pointer;
     background-image: linear-gradient(to top left,
-                                      rgba(0, 0, 0, .2),
-                                      rgba(0, 0, 0, .2) 30%,
-                                      rgba(0, 0, 0, 0));
+            rgba(0, 0, 0, .2),
+            rgba(0, 0, 0, .2) 30%,
+            rgba(0, 0, 0, 0));
     box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
-                inset -2px -2px 3px rgba(0, 0, 0, .6);
-    
+        inset -2px -2px 3px rgba(0, 0, 0, .6);
+
     filter: brightness(1.0);
 
     border: 0;
@@ -177,8 +172,9 @@ p[data-error] {
     display: flex;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+    width: 80%;
 }
-  
+
 @keyframes slidein {
     from {
         margin-left: 100%;
@@ -191,11 +187,12 @@ p[data-error] {
 
 div[id=div-error] {
     display: flex;
+    flex-direction: row;
 }
 
-div[id=div-error] input {
+div[id=div-error] button {
     width: 50px;
-    height: 35px;
+    height: 57px;
     background-color: rgb(189, 77, 83);
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -203,7 +200,9 @@ div[id=div-error] input {
     padding: 0px;
 }
 
-.btn-set-default, .btn-zoom-in, .btn-zoom-out {
+.btn-set-default,
+.btn-zoom-in,
+.btn-zoom-out {
     top: 5%;
     flex-direction: row;
     display: flex;
