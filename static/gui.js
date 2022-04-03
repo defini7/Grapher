@@ -28,8 +28,6 @@ function appendRow() {
                             div.setAttribute('class', 'div-slider')
                             div.setAttribute('id', 'div-' + expr[i])
 
-                            console.log(expr)
-
                             slider.setAttribute('type', 'range')
                             slider.setAttribute('min', '-10')
                             slider.setAttribute('max', '10')
