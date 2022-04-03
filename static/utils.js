@@ -45,6 +45,10 @@ function save() {
             data.expressions.push({ exp: expression, col: color })
         })
 
+    canvas.toBlob(blob => {
+        saveAs(blob, 'something.png')
+    })
+
     fetch('/save', {
         method: 'POST',
         body: JSON.stringify(data),

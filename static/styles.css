@@ -175,6 +175,11 @@ p[data-error] {
     width: 80%;
 }
 
+.div-b-slider-value {
+    margin-top: 0.5vh;
+    margin-left: 1vw;
+}
+
 @keyframes slidein {
     from {
         margin-left: 100%;

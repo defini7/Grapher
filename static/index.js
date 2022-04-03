@@ -50,7 +50,7 @@ window.onload = function () {
             }
         })
 
-        canvas.addEventListener('mouseup', evt => {
+        canvas.addEventListener('mouseup', _ => {
             panStarted = false
         })
 
