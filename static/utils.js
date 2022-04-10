@@ -40,14 +40,13 @@ function save() {
     document.querySelector('[data-expressions]').querySelectorAll('.expression')
         .forEach(elem => {
             const expression = elem.querySelector('input[name="expression"]').value.toLowerCase() || ''
-            const color = elem.querySelector('input[name="color"]').value || 'red'
+            const color = elem.querySelector('input[name="color"]').value || '#00000'
 
-            data.expressions.push({ exp: expression, col: color })
+            clear()
+            drawGraph(expression, color, 3)
+
+            data.expressions.push({ exp: expression, col: color, date: Date.now(), bin: canvas.toDataURL() })
         })
-
-    canvas.toBlob(blob => {
-        saveAs(blob, 'something.png')
-    })
 
     fetch('/save', {
         method: 'POST',
@@ -56,6 +55,8 @@ function save() {
             'Content-Type': 'application/json;charset=utf-8'
         },
     })
+
+    drawAll()
 }
 
 function load() {

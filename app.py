@@ -1,10 +1,10 @@
-from datetime import datetime
-from flask import render_template, session, redirect, request, flash, Flask
+from flask import render_template, session, redirect, request, flash, Flask, jsonify, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 import database as db
 from functools import wraps
 import os
 import json
+from binascii import a2b_base64
 
 
 app = Flask(__name__)
@@ -102,18 +102,25 @@ def save():
     dtb = db.get_db()
 
     for e in responce['expressions']:
-        dtb.execute('INSERT INTO graphs(user_id, name, expression, color) VALUES(?, ?, ?, ?)', (session.get('user_id'), datetime.now().strftime('%Y-%m-%d %H-%M-%S'), e['exp'], e['col']))
+        with open(os.path.join('static', 'img', str(e['date']) + '-' + str(session.get('user_id')) + '.png'), 'wb') as f:
+            in_binary = a2b_base64(e['bin'].split(',')[1])
+            f.write(in_binary)
+
+        dtb.execute(
+            'INSERT INTO graphs(user_id, name, expression, color) VALUES(?, ?, ?, ?)',
+            (session.get('user_id'), e['date'], e['exp'], e['col'])
+        )
         
     dtb.commit()
 
-    return json.dumps({})
+    return jsonify({})
 
 @login_required
 @app.route('/load/<id>', methods=['GET', 'POST'])
 def load(id):
     dtb = db.get_db()
     graph = [dict(r) for r in dtb.execute('SELECT * FROM graphs WHERE id = ? AND user_id = ?', (id, session.get('user_id'))).fetchall()][0]
-    return json.dumps(graph)
+    return jsonify(graph)
 
 @login_required
 @app.route('/library', methods=['GET', 'POST'])
@@ -133,10 +140,13 @@ def delete(id):
     dtb = db.get_db()
 
     if dict(dtb.execute('SELECT user_id FROM graphs WHERE id = ?', (id,)).fetchall()[0])['user_id'] == session.get('user_id'):
+        name = dtb.execute('SELECT name FROM graphs WHERE id = ?', (id,)).fetchone()[0]
+        os.remove(os.getcwd() + url_for('static', filename='img/'+ name + '-' + str(session.get('user_id')) +'.png'))
+
         dtb.execute('DELETE FROM graphs WHERE id = ?', (id,))
         dtb.commit()
 
-    return json.dumps({})
+    return jsonify({})
 
 if __name__ == "__main__":
     app.run()

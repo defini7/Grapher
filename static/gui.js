@@ -84,7 +84,7 @@ function appendRow() {
     document.querySelector('[data-expressions]').appendChild(clone)
 }
 
-function setDefault(_) {
+function setDefault() {
     state.scale = 1;
     state.error = '';
 
