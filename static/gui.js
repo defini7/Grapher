@@ -1,72 +1,74 @@
+function updateGraphs() {
+    const divs = document.getElementsByClassName('div-slider')
+    for (let i = 0; i < divs.length; i++) {
+        divs[i].remove()
+    }
+
+    const exprs = document.getElementsByClassName('expression')
+
+    for (let j = 1; j < exprs.length; j++) {
+        const expr = exprs[j].querySelector('input[name=expression]').value
+
+        for (let i = 0; i < expr.length; i++) {
+            if (isAlpha(expr[i]) && (!isAlpha(expr[i - 1]) || expr[i - 1] == undefined) && (!isAlpha(expr[i + 1]) || expr[i + 1] == undefined)) {
+                let s = document.getElementById(expr[i])
+                if (s == null) {
+                    if (expr[i] != 'x') {
+                        let slider = document.createElement('input')
+                        let name = document.createElement('b')
+                        let div = document.createElement('div')
+                        let value = document.createElement('b')
+
+                        name.innerHTML = expr[i]
+
+                        div.setAttribute('class', 'div-slider')
+                        div.setAttribute('id', 'div-' + expr[i])
+
+                        slider.setAttribute('type', 'range')
+                        slider.setAttribute('min', '-10')
+                        slider.setAttribute('max', '10')
+                        slider.setAttribute('step', '0.1')
+                        slider.setAttribute('value', '1')
+                        slider.setAttribute('id', expr[i])
+                        slider.setAttribute('class', 'slider')
+                        slider.addEventListener('input', evt => {
+                            value.innerHTML = slider.value
+                            alphas[evt.target.id] = evt.target.value
+                            collectPointsFor(expr)
+                            drawAll()
+                        })
+
+                        value.innerHTML = slider.value
+                        value.setAttribute('class', 'div-b-slider-value')
+
+                        div.appendChild(name)
+                        div.appendChild(slider)
+                        div.appendChild(value)
+
+                        document.querySelector('div[data-expressions]').appendChild(div)
+
+                        alphas[expr[i]] = 1
+                    }
+                } else {
+                    alphas[expr[i]] = s.value
+                }
+            }
+        }
+
+        collectPointsFor(expr)
+    }
+
+    drawAll()
+}
+
 function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
 
-    function update() {
-        const divs = document.getElementsByClassName('div-slider')
-        for (let i = 0; i < divs.length; i++) {
-            divs[i].remove()
-        }
+    const input = clone.querySelector('input[name="expression"]')
 
-        const exprs = document.getElementsByClassName('expression')
-
-        for (let j = 1; j < exprs.length; j++) {
-            const expr = exprs[j].querySelector('input[name=expression]').value
-
-            for (let i = 0; i < expr.length; i++) {
-                if (isAlpha(expr[i]) && (!isAlpha(expr[i - 1]) || expr[i - 1] == undefined) && (!isAlpha(expr[i + 1]) || expr[i + 1] == undefined)) {
-                    let s = document.getElementById(expr[i])
-                    if (s == null) {
-                        if (expr[i] != 'x') {
-                            let slider = document.createElement('input')
-                            let name = document.createElement('b')
-                            let div = document.createElement('div')
-                            let value = document.createElement('b')
-
-                            name.innerHTML = expr[i]
-
-                            div.setAttribute('class', 'div-slider')
-                            div.setAttribute('id', 'div-' + expr[i])
-
-                            slider.setAttribute('type', 'range')
-                            slider.setAttribute('min', '-10')
-                            slider.setAttribute('max', '10')
-                            slider.setAttribute('step', '0.1')
-                            slider.setAttribute('value', '1')
-                            slider.setAttribute('id', expr[i])
-                            slider.setAttribute('class', 'slider')
-                            slider.addEventListener('input', evt => {
-                                value.innerHTML = slider.value
-                                alphas[evt.target.id] = evt.target.value
-                                collectPointsFor(expr)
-                                drawAll()
-                            })
-
-                            value.innerHTML = slider.value
-                            value.setAttribute('class', 'div-b-slider-value')
-
-                            div.appendChild(name)
-                            div.appendChild(slider)
-                            div.appendChild(value)
-
-                            document.querySelector('div[data-expressions]').appendChild(div)
-
-                            alphas[expr[i]] = 1
-                        }
-                    } else {
-                        alphas[expr[i]] = s.value
-                    }
-                }
-            }
-
-            collectPointsFor(expr)
-        }
-
-        drawAll()
-    }
-
-    clone.addEventListener('change', _ => {
-        update()
+    input.addEventListener('change', _ => {
+        updateGraphs()
     })
 
     clone.querySelector('[data-delete]').addEventListener('click', _ => {

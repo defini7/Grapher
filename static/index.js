@@ -94,5 +94,7 @@ window.onload = function () {
         errorElement.addEventListener('animationend', () => {
             document.querySelector('div[id=div-error] button').removeAttribute('hidden')
         })
+
+        updateGraphs()
     }
 }

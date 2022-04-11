@@ -9,11 +9,10 @@ body {
     margin-top: 5%;
     position: absolute;
     background-color: rgb(236, 235, 235);
-    height: 93.8vh;
+    height: 94%;
     width: 23%;
     margin-top: 6.2vh;
     overflow-y: scroll;
-    overflow-x: scroll;
 }
 
 .controll {
