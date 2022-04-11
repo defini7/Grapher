@@ -240,6 +240,6 @@ img {
     width: 5vw;
     height: 5vh;
     border: 2px solid black;
-    margin-top: 0px;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }

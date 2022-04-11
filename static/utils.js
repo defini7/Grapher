@@ -23,6 +23,12 @@ function isAlpha(val) {
     return /^[a-zA-Z]*$/gi.test(val)
 }
 
+function setDefaultAlphas() {
+    for (key in alphas) {
+        alphas[key] = 1
+    }
+}
+
 function wheel(e) {
     let { scale } = state
 
@@ -43,7 +49,9 @@ function save() {
             const color = elem.querySelector('input[name="color"]').value || '#00000'
 
             clear()
-            drawGraph(expression, color, 3)
+            setDefaultAlphas()
+            collectPointsFor(expression)
+            drawGraph(expression, color, 10)
 
             data.expressions.push({ exp: expression, col: color, date: Date.now(), bin: canvas.toDataURL() })
         })
