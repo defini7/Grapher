@@ -1,11 +1,12 @@
 let graphs = new Map()
+let inputWasChanged = false
 
 function collectPointsFor(expr) {
     const { scale } = state
 
     const { x } = size
     const verticalSize = x / (50 * scale)
-    const points_count = 200 * verticalSize
+    const points_count = 1000 * verticalSize
 
     let points = []
 
@@ -22,7 +23,10 @@ function collectPointsFor(expr) {
             })
 
         } catch (e) {
-            state.error = `${e}`
+            if (inputWasChanged) {
+                state.error = `${e}`
+                inputWasChanged = false
+            }
             break
         }
     }

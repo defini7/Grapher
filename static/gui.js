@@ -65,10 +65,19 @@ function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
 
-    const input = clone.querySelector('input[name="expression"]')
+    const inputExpr = clone.querySelector('input[name="expression"]')
+    const inputCol = clone.querySelector('input[type=color]')
 
-    input.addEventListener('change', _ => {
+    inputExpr.addEventListener('input', _ => {
         updateGraphs()
+    })
+
+    inputExpr.addEventListener('change', _ => {
+        inputWasChanged = true
+    })
+
+    inputCol.addEventListener('change', _ => {
+        inputWasChanged = true
     })
 
     clone.querySelector('[data-delete]').addEventListener('click', _ => {
