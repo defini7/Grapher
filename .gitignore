@@ -4,4 +4,4 @@ __pycache__
 graphs.db
 package-lock.json
 .vscode
-static/img
+static/img/*
