@@ -57,6 +57,11 @@ canvas {
     border-radius: 10px;
 }
 
+[data-draw] {
+    border-radius: 10px;
+    background-color: greenyellow;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -85,14 +90,11 @@ canvas {
     display: table-column;
 }
 
-#append {
+[data-append] {
     border-radius: 10px;
-}
-
-#append {
     background-color: rgb(123, 174, 190);
     border-color: rgb(123, 174, 190);
-    margin-left: 35%;
+    margin-left: 25%;
 }
 
 #input-expression {

@@ -95,6 +95,8 @@ window.onload = function () {
             document.querySelector('div[id=div-error] button').removeAttribute('hidden')
         })
 
+        document.querySelector('[data-draw]').addEventListener('click', updateGraphs)
+
         updateGraphs()
     }
 }
