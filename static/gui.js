@@ -81,8 +81,8 @@ function appendRow() {
 }
 
 function setDefault() {
-    state.scale = 1;
-    state.error = '';
+    state.scale = 1
+    state.error = ''
 
     offset.x = 0
     offset.y = 0
@@ -107,10 +107,9 @@ function hideError() {
 }
 
 function deleteGraph(id) {
+    document.getElementById(id).remove()
+
     fetch('/delete/' + id, {
         method: 'POST'
     })
-
-    document.getElementById(id).remove()
-    window.location.replace('/library')
 }

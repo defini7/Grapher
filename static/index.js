@@ -1,6 +1,6 @@
-let canvas
-let context
-let state
+let canvas = null
+let context = null
+let state = null
 
 let size = {
     width: 0,
