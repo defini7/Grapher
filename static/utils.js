@@ -53,10 +53,7 @@ function save() {
             collectPointsFor(expression)
             drawGraph(expression, color, 10)
 
-            const url = canvas.toDataURL()
-            console.log(url)
-
-            data.expressions.push({ exp: expression, col: color, date: Date.now(), bin: url })
+            data.expressions.push({ exp: expression, col: color, date: Date.now(), bin: canvas.toDataURL() })
         })
         
     fetch('/save', {
