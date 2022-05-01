@@ -1,17 +1,18 @@
 body {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .scrolled {
     flex-grow: 1;
     margin-left: 0px;
-    margin-top: 5%;
+    margin-top: 3.6em;
     position: absolute;
     background-color: rgb(236, 235, 235);
     height: 94%;
-    width: 23%;
-    margin-top: 6.2vh;
+    width: 25%;
     overflow-y: scroll;
 }
 
@@ -23,6 +24,7 @@ body {
 
 input[type=color] {
     height: inherit;
+    width: 10em;
     background-color: gainsboro;
     padding: 0px;
 }
@@ -34,7 +36,7 @@ input[name=expression] {
 #app {
     width: 100%;
     height: 100%;
-    flex-basis: 93.8vh;
+    flex-basis: 45em;
     position: relative;
     border-bottom: 1px solid gray;
 }
@@ -59,7 +61,7 @@ canvas {
 
 [data-draw] {
     border-radius: 10px;
-    background-color: greenyellow;
+    background-color: cornflowerblue;
 }
 
 * {
@@ -168,7 +170,7 @@ input[type=checkbox] {
 }
 
 p[data-error] {
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     animation-name: slidein;
     display: flex;
     border-top-right-radius: 0px;
@@ -219,6 +221,7 @@ div[id=div-error] button {
     width: 4.5%;
     height: 5%;
     border: 0;
+    padding: auto;
 }
 
 .btn-zoom-in {
@@ -233,6 +236,7 @@ div[id=div-error] button {
 
 div[id=all-expressions] input[type=color] {
     height: 5vh;
+    width: 10em;
     border: 0;
     position: fixed;
 }
