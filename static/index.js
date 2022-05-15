@@ -1,6 +1,6 @@
-let canvas
-let context
-let state
+let canvas = null
+let context = null
+let state = null
 
 let size = {
     width: 0,
@@ -94,6 +94,8 @@ window.onload = function () {
         errorElement.addEventListener('animationend', () => {
             document.querySelector('div[id=div-error] button').removeAttribute('hidden')
         })
+
+        document.querySelector('[data-draw]').addEventListener('click', updateGraphs)
 
         updateGraphs()
     }

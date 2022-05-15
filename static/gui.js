@@ -65,21 +65,6 @@ function appendRow() {
     if (!document.querySelector('[data-template]')) return
     const clone = document.querySelector('[data-template]').cloneNode(true)
 
-    const inputExpr = clone.querySelector('input[name="expression"]')
-    const inputCol = clone.querySelector('input[type=color]')
-
-    inputExpr.addEventListener('input', _ => {
-        updateGraphs()
-    })
-
-    inputExpr.addEventListener('change', _ => {
-        inputWasChanged = true
-    })
-
-    inputCol.addEventListener('change', _ => {
-        inputWasChanged = true
-    })
-
     clone.querySelector('[data-delete]').addEventListener('click', _ => {
         const expr = clone.querySelector('input[name="expression"]').value
         for (let i = 0; i < expr.length; i++) {
@@ -96,8 +81,8 @@ function appendRow() {
 }
 
 function setDefault() {
-    state.scale = 1;
-    state.error = '';
+    state.scale = 1
+    state.error = ''
 
     offset.x = 0
     offset.y = 0
@@ -122,10 +107,9 @@ function hideError() {
 }
 
 function deleteGraph(id) {
+    document.getElementById(id).remove()
+
     fetch('/delete/' + id, {
         method: 'POST'
     })
-
-    document.getElementById(id).remove()
-    window.location.replace('/library')
 }

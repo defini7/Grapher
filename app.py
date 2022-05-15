@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import database as db
 from functools import wraps
 import os
-import json
+from json import loads
 from binascii import a2b_base64
 
 
@@ -96,9 +96,9 @@ def signout():
     return redirect('/')
 
 @login_required
-@app.route('/save', methods=["POST"])
+@app.post('/save')
 def save():
-    responce = json.loads(request.data)
+    responce = loads(request.data)
     dtb = db.get_db()
 
     for e in responce['expressions']:
@@ -119,7 +119,7 @@ def save():
 @app.route('/load/<id>', methods=['GET', 'POST'])
 def load(id):
     dtb = db.get_db()
-    graph = [dict(r) for r in dtb.execute('SELECT * FROM graphs WHERE id = ? AND user_id = ?', (id, session.get('user_id'))).fetchall()][0]
+    graph = dtb.execute('SELECT * FROM graphs WHERE id = ? AND user_id = ?', (id, session.get('user_id'))).fetchone()[0]
     return jsonify(graph)
 
 @login_required
@@ -135,11 +135,13 @@ def library():
     return render_template('library.html', expressions=exps)
 
 @login_required
-@app.route('/delete/<id>', methods=['POST'])
+@app.post('/delete/<id>')
 def delete(id):
     dtb = db.get_db()
 
-    if dict(dtb.execute('SELECT user_id FROM graphs WHERE id = ?', (id,)).fetchall()[0])['user_id'] == session.get('user_id'):
+    user_id = dtb.execute('SELECT user_id FROM graphs WHERE id = ?', (id,)).fetchone()[0]
+
+    if user_id == session.get('user_id'):
         name = dtb.execute('SELECT name FROM graphs WHERE id = ?', (id,)).fetchone()[0]
         os.remove(os.getcwd() + url_for('static', filename='img/'+ name + '-' + str(session.get('user_id')) +'.png'))
 

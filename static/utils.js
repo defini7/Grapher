@@ -55,7 +55,7 @@ function save() {
 
             data.expressions.push({ exp: expression, col: color, date: Date.now(), bin: canvas.toDataURL() })
         })
-
+        
     fetch('/save', {
         method: 'POST',
         body: JSON.stringify(data),

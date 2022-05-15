@@ -154,10 +154,13 @@ function drawGrid(xSize = 10, ySize = xSize) {
 
 function resize() {
     const { offsetWidth: width, offsetHeight: height } = canvas
+
     size.width = canvas.width = width
     size.height = canvas.height = height
+
     size.x = width * 0.5
     size.y = height * 0.5
+
     context.translate(size.x, size.y)
     drawAll()
 }
