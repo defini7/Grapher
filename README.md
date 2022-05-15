@@ -3,8 +3,8 @@
 
 # Запуск
 
-1. Создать базу данных: ```flask init-db```
-2. ```flask run```
+1. Создать базу данных: ```python -m flask init-db```
+2. ```python -m flask run```
 
 # Лицензия
 
