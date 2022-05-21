@@ -4,37 +4,37 @@ function updateGraphs() {
         divs[i].remove()
     }
 
-    const exprs = document.getElementsByClassName('expression')
+    const expressions = document.getElementsByClassName('expression')
 
-    for (let j = 1; j < exprs.length; j++) {
-        const expr = exprs[j].querySelector('input[name=expression]').value
+    for (let j = 1; j < expressions.length; j++) {
+        const e = expressions[j].querySelector('input[name=expression]').value
 
-        for (let i = 0; i < expr.length; i++) {
-            if (isAlpha(expr[i]) && (!isAlpha(expr[i - 1]) || expr[i - 1] == undefined) && (!isAlpha(expr[i + 1]) || expr[i + 1] == undefined)) {
-                let s = document.getElementById(expr[i])
+        for (let i = 0; i < e.length; i++) {
+            if (isAlpha(e[i]) && (!isAlpha(e[i - 1]) || e[i - 1] === undefined) && (!isAlpha(e[i + 1]) || e[i + 1] === undefined)) {
+                let s = document.getElementById(e[i])
                 if (s == null) {
-                    if (expr[i] != 'x') {
+                    if (e[i] !== 'x') {
                         let slider = document.createElement('input')
                         let name = document.createElement('b')
                         let div = document.createElement('div')
                         let value = document.createElement('b')
 
-                        name.innerHTML = expr[i]
+                        name.innerHTML = e[i]
 
                         div.setAttribute('class', 'div-slider')
-                        div.setAttribute('id', 'div-' + expr[i])
+                        div.setAttribute('id', 'div-' + e[i])
 
                         slider.setAttribute('type', 'range')
                         slider.setAttribute('min', '-10')
                         slider.setAttribute('max', '10')
                         slider.setAttribute('step', '0.1')
                         slider.setAttribute('value', '1')
-                        slider.setAttribute('id', expr[i])
+                        slider.setAttribute('id', e[i])
                         slider.setAttribute('class', 'slider')
                         slider.addEventListener('input', evt => {
                             value.innerHTML = slider.value
                             alphas[evt.target.id] = evt.target.value
-                            collectPointsFor(expr)
+                            collectPointsFor(e)
                             drawAll()
                         })
 
@@ -47,15 +47,15 @@ function updateGraphs() {
 
                         document.querySelector('div[data-expressions]').appendChild(div)
 
-                        alphas[expr[i]] = 1
+                        alphas[e[i]] = 1
                     }
                 } else {
-                    alphas[expr[i]] = s.value
+                    alphas[e[i]] = s.value
                 }
             }
         }
 
-        collectPointsFor(expr)
+        collectPointsFor(e)
     }
 
     drawAll()

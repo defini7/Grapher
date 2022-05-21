@@ -87,7 +87,7 @@ function drawAxis() {
     context.closePath()
 }
 
-function drawGrid(xSize = 10, ySize = xSize) {
+function drawGrid(xSize = 10, ySize = 10) {
     if (!context) return
 
     const { x, y } = size
@@ -105,43 +105,27 @@ function drawGrid(xSize = 10, ySize = xSize) {
             const dX = gX + xSize
             const dY = gY + ySize
 
-            /* top left */
-
-            // vertical
             context.moveTo(-dX + offset.x, offset.y)
             context.lineTo(-dX + offset.x, -dY + offset.y)
 
-            // horizontal
             context.moveTo(offset.x, -dY + offset.y)
             context.lineTo(-x + offset.x, -dY + offset.y)
 
-            /* top right */
-
-            // vertical
             context.moveTo(dX + offset.x, offset.y)
             context.lineTo(dX + offset.x, -dY + offset.y)
 
-            // horizontal
             context.moveTo(offset.x, -dY + offset.y)
             context.lineTo(x + offset.x, -dY + offset.y)
 
-            /* bottom left */
-
-            // vertical
             context.moveTo(-dX + offset.x, offset.y)
             context.lineTo(-dX + offset.x, dY + offset.y)
 
-            // horizontal
             context.moveTo(offset.x, dY + offset.y)
             context.lineTo(-x + offset.x, dY + offset.y)
 
-            /* bottom right */
-
-            // vertical
             context.moveTo(dX + offset.x, offset.y)
             context.lineTo(dX + offset.x, dY + offset.y)
 
-            // horizontal
             context.moveTo(offset.x, dY + offset.y)
             context.lineTo(x + offset.x, dY + offset.y)
         }
@@ -170,25 +154,25 @@ function drawAll() {
 
     size.x += offset.x
     size.y += offset.y
-    drawGrid(50)
+    drawGrid(50, 50)
     size.x -= offset.x
     size.y -= offset.y
 
     size.x -= offset.x
     size.y -= offset.y
-    drawGrid(50)
+    drawGrid(50, 50)
     size.x += offset.x
     size.y += offset.y
 
     size.x += offset.x
     size.y -= offset.y
-    drawGrid(50)
+    drawGrid(50, 50)
     size.x -= offset.x
     size.y += offset.y
 
     size.x -= offset.x
     size.y += offset.y
-    drawGrid(50)
+    drawGrid(50, 50)
     size.x += offset.x
     size.y -= offset.y
 

@@ -69,11 +69,11 @@ window.onload = function () {
                 target[key] = value
                 saveState()
 
-                if (key == 'scale')
+                if (key === 'scale')
                     drawAll()
 
-                if (key == 'error') {
-                    if (value != '') {
+                if (key === 'error') {
+                    if (value !== '') {
                         document.querySelector('div[id=div-error]').removeAttribute('hidden')
                         document.querySelector('p[data-error]').innerHTML = state.error
                     }

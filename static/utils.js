@@ -24,8 +24,8 @@ function isAlpha(val) {
 }
 
 function setDefaultAlphas() {
-    for (key in alphas) {
-        alphas[key] = 1
+    for (const k in alphas) {
+        alphas[k] = 1
     }
 }
 

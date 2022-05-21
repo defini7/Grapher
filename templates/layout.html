@@ -37,10 +37,10 @@
                     {% if session.get('user_id') %}
                         <li class="nav-item"><a class="nav-link" href="#" onclick="save()">Save</a></li>
                         <li class="nav-item"><a class="nav-link" href="/library">Library</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/signout">Sign Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/sign_out">Sign Out</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="/signin">Sign In</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/signup">Sign Up</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/sign_in">Sign In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/sign_up">Sign Up</a></li>
                     {% endif %}
                 </ul>
             </div>

@@ -4,6 +4,7 @@ from flask import g, current_app
 from flask.cli import with_appcontext
 import os
 
+
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -34,7 +35,7 @@ def init_db():
 @with_appcontext
 def init_db_command():
     init_db()
-    click.echo('Database was successfuly initialized!')
+    click.echo('Database was successfully initialized!')
 
 
 def init_app(app):
