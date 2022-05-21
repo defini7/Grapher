@@ -234,7 +234,7 @@ div[id=div-error] button {
 
 div[id=all-expressions] input[type=color] {
     height: 5vh;
-    width: 10em;
+    width: 3em;
     border: 0;
     position: fixed;
 }

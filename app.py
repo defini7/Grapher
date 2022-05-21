@@ -17,15 +17,15 @@ app.app_context().push()
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
+        if session.get('user_id') is None:
+            return redirect('/login')
         return f(*args, **kwargs)
 
     return decorated_function
 
 
 @app.route('/', defaults={'ids': None})
-@app.route('/<ids>', methods=["GET", "POST"])
+@app.route('/<ids>', methods=['GET', 'POST'])
 def index(ids):
     exps = []
 
@@ -33,13 +33,13 @@ def index(ids):
         dtb = db.get_db()
         ids = ids.split('-')
 
-        if ids.length() > 0:
-            exps = [dict(dtb.execute('SELECT * FROM graphs WHERE id = ?', (id,)).fetchall()[0]) for id in ids.split('-')]
+        if len(ids) > 0:
+            exps = [dict(dtb.execute('SELECT * FROM graphs WHERE id = ?', (id,)).fetchall()[0]) for id in ids]
 
     return render_template('index.html', expressions=exps)
 
 
-@app.route('/sign_in', methods=["GET", "POST"])
+@app.route('/sign_in', methods=['GET', 'POST'])
 def sign_in():
     session.clear()
 
@@ -66,7 +66,7 @@ def sign_in():
     return render_template('sign_in.html')
 
 
-@app.route('/sign_up', methods=["GET", "POST"])
+@app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -98,10 +98,43 @@ def sign_up():
 
 
 @login_required
-@app.route('/sign_out', methods=["GET", "POST"])
+@app.route('/sign_out', methods=['GET', 'POST'])
 def sign_out():
     session.clear()
     return redirect('/')
+
+
+@login_required
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        dtb = db.get_db()
+
+        old_pass = request.form.get('old-pass')
+        new_pass = request.form.get('new-pass')
+        confirm_pass = request.form.get('confirm-pass')
+
+        if not old_pass or not new_pass or not confirm_pass:
+            flash('Please provide all data!')
+            return render_template('change_password.html')
+
+        user_id = session.get('user_id')
+        user_pwd = dtb.execute('SELECT password FROM users WHERE id = ?', (user_id,)).fetchone()[0]
+
+        if not check_password_hash(user_pwd, old_pass):
+            flash('Invalid current password!')
+            return render_template('change_password.html')
+
+        if new_pass != confirm_pass:
+            flash('Password and confirmation are different!')
+            return render_template('change_password.html')
+
+        dtb.execute('UPDATE users SET password = ? WHERE id = ?', (generate_password_hash(new_pass), user_id))
+        dtb.commit()
+
+        return redirect('/')
+
+    return render_template('change_password.html')
 
 
 @login_required
@@ -109,7 +142,7 @@ def sign_out():
 def save():
     dtb = db.get_db()
 
-    for e in loads(request.data):
+    for e in loads(request.data)['expressions']:
         with open(os.path.join('static', 'img', str(e['date']) + '-' + str(session.get('user_id')) + '.png'),
                   'wb') as f:
             in_binary = a2b_base64(e['bin'].split(',')[1])
@@ -164,5 +197,5 @@ def delete(id):
     return jsonify({})
 
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(host='192.168.1.10', port=5000)
